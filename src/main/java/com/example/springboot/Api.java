@@ -3,6 +3,7 @@
  */
 package com.example.springboot;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,10 +44,10 @@ public class Api {
         SpringApplication.run(Api.class, args);
     }
 
-    @PostMapping("/data")
-    public String receiveData(@RequestBody String requestData) {
+    @PostMapping("/register")
+    public String receiveData(@RequestBody User requestData) {
         // Process the received data
-        System.out.println("Received data: " + requestData);
+        System.out.println("Received data to register: " + requestData.firstName);
 
         // Return a response
         return "Data received successfully";
