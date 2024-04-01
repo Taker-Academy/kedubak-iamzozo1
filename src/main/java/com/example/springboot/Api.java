@@ -11,16 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-class User {
-    public String firstName;
-    public String lastName;
-    public String createdAt;
-    public String email;
-    public String password;
-    public String lastUpVote;
-    public String _id;
-}
-
 class Comment {
     public String createdAt;
     public int id;
@@ -47,7 +37,7 @@ public class Api {
     @PostMapping("/register")
     public String receiveData(@RequestBody User requestData) {
         // Process the received data
-        System.out.println("Received data to register: " + requestData.firstName);
+        System.out.println("Received data to register: " + requestData.getFirstName());
 
         // Return a response
         return "Data received successfully";
