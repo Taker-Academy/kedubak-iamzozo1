@@ -1,11 +1,15 @@
-package programiz.hello;
-import org.springframework.web.bind.annotation.RequestMapping;
+package com.example.springboot;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HelloController {
-	@RequestMapping("/hello")
-	public String helloWorld() {
-		return "Hello, World!";
+
+	@PostMapping("/")
+	public String index() {
+		return "Greetings from Spring Boot!";
 	}
+
 }
