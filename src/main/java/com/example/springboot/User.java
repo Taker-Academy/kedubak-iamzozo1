@@ -1,15 +1,14 @@
 package com.example.springboot;
 
 public class User {
+    private String _id;
     private String firstName;
     private String lastName;
-    private String createdAt;
     private String email;
     private String password;
+    private String createdAt;
     private String lastUpVote;
-    private String _id;
-
-    // Constructor
+    
     public User(String firstName, String lastName, String createdAt, String email, String password, String lastUpVote, String _id) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -20,7 +19,6 @@ public class User {
         this._id = _id;
     }
 
-    // Getters and setters
     public String getFirstName() {
         return firstName;
     }
@@ -75,20 +73,6 @@ public class User {
 
     public void set_id(String _id) {
         this._id = _id;
-    }
-
-    // toString method for debugging purposes
-    @Override
-    public String toString() {
-        return "User{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", createdAt='" + createdAt + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", lastUpVote='" + lastUpVote + '\'' +
-                ", _id='" + _id + '\'' +
-                '}';
     }
 }
 
