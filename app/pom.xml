@@ -30,6 +30,11 @@
 			<artifactId>mongodb-driver-sync</artifactId>
 			<version>5.0.0</version>
 		</dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>latest.stable</version>
+    </dependency>
   </dependencies>
 
   <build>
