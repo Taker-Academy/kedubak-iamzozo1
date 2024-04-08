@@ -47,8 +47,11 @@ func CreateUser(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
 	}
-
-	return c.Status(http.StatusCreated).JSON(responses.UserResponse{Status: http.StatusCreated, Message: "success", Data: &fiber.Map{"data": result}})
+	token, err := configs.CreateJWTToken(result.InsertedID.(primitive.ObjectID).String())
+	if err != nil {
+		panic("tokenisation failed")
+	}
+	return c.Status(http.StatusCreated).JSON(responses.UserResponse{Status: http.StatusCreated, Message: "success", Data: &fiber.Map{"data": result, "token": token}})
 }
 
 func GetAUser(c *fiber.Ctx) error {
