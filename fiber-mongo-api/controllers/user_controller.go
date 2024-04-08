@@ -35,9 +35,12 @@ func CreateUser(c *fiber.Ctx) error {
 
 	newUser := models.User{
 		Id:       primitive.NewObjectID(),
-		Name:     user.Name,
-		Location: user.Location,
-		Title:    user.Title,
+		Email: user.Email,
+		FirstName:     user.FirstName,
+		LastName: user.LastName,
+		Password:    user.Password,
+		LastUpVote:	(time.Now().Add(-1 * time.Minute)).String(),
+		CreatedAt: time.Now().String(),
 	}
 
 	result, err := userCollection.InsertOne(ctx, newUser)
@@ -64,7 +67,7 @@ func GetAUser(c *fiber.Ctx) error {
     return c.Status(http.StatusOK).JSON(responses.UserResponse{Status: http.StatusOK, Message: "success", Data: &fiber.Map{"data": user}})
 }
 
-func EditAUser(c *fiber.Ctx) error {
+/*func EditAUser(c *fiber.Ctx) error {
     ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
     userId := c.Params("userId")
     var user models.User
@@ -100,7 +103,7 @@ func EditAUser(c *fiber.Ctx) error {
     }
 
     return c.Status(http.StatusOK).JSON(responses.UserResponse{Status: http.StatusOK, Message: "success", Data: &fiber.Map{"data": updatedUser}})
-}
+}*/
 
 func DeleteAUser(c *fiber.Ctx) error {
     ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
@@ -109,7 +112,7 @@ func DeleteAUser(c *fiber.Ctx) error {
 
     objId, _ := primitive.ObjectIDFromHex(userId)
 
-    result, err := userCollection.DeleteOne(ctx, bson.M{"id": objId})
+    result, err := userCollection.DeleteOne(ctx, bson.M{"_id": objId})
     if err != nil {
         return c.Status(http.StatusInternalServerError).JSON(responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
     }
