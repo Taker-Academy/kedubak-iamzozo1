@@ -51,7 +51,24 @@ func CreateUser(c *fiber.Ctx) error {
 	if err != nil {
 		panic("tokenisation failed")
 	}
-	return c.Status(http.StatusCreated).JSON(responses.UserResponse{Status: http.StatusCreated, Message: "success", Data: &fiber.Map{"data": result, "token": token}})
+	
+	userResponse := struct {
+        Email    string `json:"email"`
+        FirstName string `json:"firstName"`
+        LastName  string `json:"lastName"`
+    }{
+        Email:    newUser.Email,
+        FirstName: newUser.FirstName,
+        LastName:  newUser.LastName,
+    }
+
+    return c.Status(http.StatusCreated).JSON(map[string]interface{}{
+        "ok":      true,
+        "data": map[string]interface{}{
+            "token":  token,
+            "user":   userResponse,
+        },
+    })
 }
 
 func GetAUser(c *fiber.Ctx) error {
