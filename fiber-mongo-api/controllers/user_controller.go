@@ -71,21 +71,51 @@ func CreateUser(c *fiber.Ctx) error {
     })
 }
 
-func GetAUser(c *fiber.Ctx) error {
+func LogUser(c *fiber.Ctx) error {
     ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-    userId := c.Params("userId")
+    email := c.Params("email")
+    password := c.Params("password")
     var user models.User
     defer cancel()
 
-    objId, _ := primitive.ObjectIDFromHex(userId)
-
-    err := userCollection.FindOne(ctx, bson.M{"id": objId}).Decode(&user)
+    err := userCollection.FindOne(ctx, bson.M{"email": email}).Decode(&user)
     if err != nil {
+        if err == mongo.ErrNoDocuments {
+            return c.Status(http.StatusUnauthorized).JSON(responses.UserResponse{Status: http.StatusUnauthorized, Message: "Invalid login credentials"})
+        }
         return c.Status(http.StatusInternalServerError).JSON(responses.UserResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
     }
 
-    return c.Status(http.StatusOK).JSON(responses.UserResponse{Status: http.StatusOK, Message: "success", Data: &fiber.Map{"data": user}})
+    if password != user.Password {
+        return c.Status(http.StatusUnauthorized).JSON(responses.UserResponse{Status: http.StatusUnauthorized, Message: "Invalid login credentials"})
+    }
+
+    // Login successful, return user information
+    token, err := configs.CreateJWTToken(user.Id.String())
+
+	if err != nil {
+		panic("tokenisation failed")
+	}
+
+    userResponse := struct {
+        Email    string `json:"email"`
+        FirstName string `json:"firstName"`
+        LastName  string `json:"lastName"`
+    }{
+        Email:    user.Email,
+        FirstName: user.FirstName,
+        LastName:  user.LastName,
+    }
+
+    return c.Status(http.StatusCreated).JSON(map[string]interface{}{
+        "ok":      true,
+        "data": map[string]interface{}{
+            "token":  token,
+            "user":   userResponse,
+        },
+    })
 }
+
 
 /*func EditAUser(c *fiber.Ctx) error {
     ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)

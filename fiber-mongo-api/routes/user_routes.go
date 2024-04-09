@@ -15,7 +15,7 @@ func UserRoute(app *fiber.App) {
         return c.SendStatus(http.StatusOK)
     })
     app.Post("/auth/register", controllers.CreateUser)
-	app.Get("/user/:userId", controllers.GetAUser)
+    app.Post("/auth/login", controllers.LogUser)
 	//app.Put("/user/:userId", controllers.EditAUser)
     app.Delete("/user/:userId", controllers.DeleteAUser)
     app.Get("/users", controllers.GetAllUsers)
