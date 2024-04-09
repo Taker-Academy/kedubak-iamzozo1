@@ -10,7 +10,9 @@ import (
 func UserRoute(app *fiber.App) {
 
     app.Options("/auth/register", func(c *fiber.Ctx) error {
-        return c.SendStatus(http.StatusOK) // Allow OPTIONS for registration
+        c.Response().Header.Set("Access-Control-Allow-Origin", "*")
+        c.Response().Header.Set("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
+        return c.SendStatus(http.StatusOK)
     })
     app.Post("/auth/register", controllers.CreateUser)
 	app.Get("/user/:userId", controllers.GetAUser)

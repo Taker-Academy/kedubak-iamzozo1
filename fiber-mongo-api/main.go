@@ -4,18 +4,16 @@ import (
     "fiber-mongo-api/configs"
     "fiber-mongo-api/routes"
     "github.com/gofiber/fiber/v2"
+    "github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
     app := fiber.New()
 
-	app.Use(func (c *fiber.Ctx) error {
-		c.Response().Header.Set("Access-Control-Allow-Origin", "*")
-		c.Response().Header.Set("Access-Control-Allow-Methods", "GET,POST,OPTIONS")
-		c.Response().Header.Set("Access-Control-Allow-Origin", "Content-Type,Authorization")
-	
-		return c.Next()
-	})
+	app.Use(cors.New(cors.Config{
+        AllowOrigins: "*",
+        AllowMethods: "GET,POST,OPTIONS",
+    }))
 
     //run database
     configs.ConnectDB()
